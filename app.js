@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const apiToken = dfe1458e2198b13790d802815e1300d88d178a9e//process.env.API_TOKEN;
+const apiToken = 'key'
 const domain = 'https://pipedrivetest9.pipedrive.com';
 
 // Set up the API endpoints
