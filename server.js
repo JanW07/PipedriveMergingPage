@@ -6,7 +6,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-const apiToken = process.env.API_KEY;
+const apiToken = process.env.PIPEDRIVE_API_KEY;
 const domain = 'https://pipedrivetest9.pipedrive.com';
 
 // Set up the API endpoints
