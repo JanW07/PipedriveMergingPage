@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipedrive Merge Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Pipedrive Merge Tool</h1>
+
+        <div class="form-group">
+            <label for="mergeType">Merge Type:</label>
+            <select id="mergeType">
+                <option value="persons">Persons</option>
+                <option value="organizations">Organizations</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="mergeBy">Merge by:</label>
+            <select id="mergeBy">
+                <!-- Options will be populated dynamically -->
+            </select>
+        </div>
+
+        <button id="mergeBtn">Merge Duplicates</button>
+        <div id="result"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
