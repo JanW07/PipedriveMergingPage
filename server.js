@@ -1,15 +1,21 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config();
 const app = express();
 app.use(express.json());
 
+// Set the root directory to serve static files like index.html, styles.css, and app.js
+const rootDir = path.resolve();
+
+// Serve static files (HTML, CSS, JS)
+app.use(express.static(rootDir));
+
+// API settings
 const apiToken = process.env.PIPEDRIVE_API_KEY;
 const domain = 'https://pipedrivetest9.pipedrive.com';
-
-// Set up the API endpoints
 const personApiEndpoint = `${domain}/v1/persons`;
 const organizationApiEndpoint = `${domain}/v1/organizations`;
 
@@ -31,7 +37,6 @@ async function handleMerge(type, mergeBy) {
         throw new Error('Invalid merge type selected.');
     }
 
-    // Fetch all records from the API
     const response = await fetch(`${apiEndpoint}?api_token=${apiToken}`);
     const data = await response.json();
 
@@ -39,13 +44,9 @@ async function handleMerge(type, mergeBy) {
         throw new Error(`Failed to fetch data: ${data.error}`);
     }
 
-    // Process the data
     const records = data.data;
-
-    // Find duplicates based on the selected merge type
     const duplicates = findDuplicatesFn(records, mergeBy);
 
-    // Merge duplicates
     for (const [key, recordsList] of Object.entries(duplicates)) {
         const mainRecord = recordsList[0];
         const duplicateIds = recordsList.slice(1).map(r => r.id);
@@ -55,9 +56,8 @@ async function handleMerge(type, mergeBy) {
     return { message: 'Merge successful' };
 }
 
-// Function to find person duplicates based on type (email, name, or phone)
 function findPersonDuplicates(persons, type) {
-    let typeDict = {};
+    const typeDict = {};
 
     for (const person of persons) {
         let values = [];
@@ -100,7 +100,6 @@ function findPersonDuplicates(persons, type) {
     );
 }
 
-// Function to merge persons
 async function mergePersons(mainPersonId, duplicatePersonIds) {
     for (const duplicatePersonId of duplicatePersonIds) {
         try {
@@ -123,7 +122,6 @@ async function mergePersons(mainPersonId, duplicatePersonIds) {
     }
 }
 
-// Function to find organization duplicates based on type (name or address)
 function findOrganizationDuplicates(organizations, type) {
     const typeDict = {};
 
@@ -166,7 +164,6 @@ function findOrganizationDuplicates(organizations, type) {
     );
 }
 
-// Function to merge organizations
 async function mergeOrganizations(mainOrganizationId, duplicateOrganizationIds) {
     for (const duplicateOrganizationId of duplicateOrganizationIds) {
         try {
@@ -201,9 +198,7 @@ app.post('/api/merge', async (req, res) => {
     }
 });
 
-// Serve static files (HTML, CSS, JS)
-app.use(express.static('public'));
-
+// Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
