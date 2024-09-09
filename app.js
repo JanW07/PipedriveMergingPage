@@ -1,6 +1,4 @@
-require('dotenv').config();
-
-const apiToken = 'key'
+const apiToken = process.env.PIPEDRIVE_API_TOKEN;
 const domain = 'https://pipedrivetest9.pipedrive.com';
 
 // Set up the API endpoints
@@ -53,10 +51,10 @@ async function handleMerge(type, mergeBy) {
 
 // Function to find person duplicates based on type (email, name, or phone)
 function findPersonDuplicates(persons, type) {
-    const typeDict = {};
+    let typeDict = {};  // Zmieniamy const na let
 
     for (const person of persons) {
-        let values = [];
+        let values = [];  // Zmieniamy const na let
 
         if (type === 'email') {
             values = person.email || [];
@@ -70,7 +68,7 @@ function findPersonDuplicates(persons, type) {
             values = [values];
         }
 
-        for (const value of values) {
+        for (let value of values) {  // Zmieniamy const na let
             if (typeof value === 'object') {
                 value = value.value;
             }
@@ -95,6 +93,7 @@ function findPersonDuplicates(persons, type) {
         Object.entries(mostRecentDict).filter(([key, persons]) => persons.length > 1)
     );
 }
+
 
 // Function to merge persons
 async function mergePersons(mainPersonId, duplicatePersonIds) {
